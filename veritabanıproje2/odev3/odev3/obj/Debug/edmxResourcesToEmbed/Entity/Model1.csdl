@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="odev3Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tblkategori">
+    <Key>
+      <PropertyRef Name="kategoriid" />
+    </Key>
+    <Property Name="kategoriid" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="kategoriad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblurun" Relationship="Self.FK_tblurun_tblkategori1" FromRole="tblkategori" ToRole="tblurun" />
+  </EntityType>
+  <EntityType Name="tblmusteri">
+    <Key>
+      <PropertyRef Name="musteriid" />
+    </Key>
+    <Property Name="musteriid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="musteriad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="musterisoyad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblsatiss" Relationship="Self.FK_tblsatiss_tblmusteri" FromRole="tblmusteri" ToRole="tblsatiss" />
+  </EntityType>
+  <EntityType Name="tblpersonel">
+    <Key>
+      <PropertyRef Name="personelid" />
+    </Key>
+    <Property Name="personelid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="personeladsoyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblsatiss" Relationship="Self.FK_tblsatiss_tblpersonel" FromRole="tblpersonel" ToRole="tblsatiss" />
+  </EntityType>
+  <EntityType Name="tblsatiss">
+    <Key>
+      <PropertyRef Name="satisid" />
+    </Key>
+    <Property Name="satisid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="urun" Type="Int32" />
+    <Property Name="musteri" Type="Int32" />
+    <Property Name="personel" Type="Int32" />
+    <Property Name="fiyat" Type="Decimal" Precision="18" Scale="2" />
+    <NavigationProperty Name="tblmusteri" Relationship="Self.FK_tblsatiss_tblmusteri" FromRole="tblsatiss" ToRole="tblmusteri" />
+    <NavigationProperty Name="tblpersonel" Relationship="Self.FK_tblsatiss_tblpersonel" FromRole="tblsatiss" ToRole="tblpersonel" />
+    <NavigationProperty Name="tblurun" Relationship="Self.FK_tblsatiss_tblurun" FromRole="tblsatiss" ToRole="tblurun" />
+  </EntityType>
+  <EntityType Name="tblurun">
+    <Key>
+      <PropertyRef Name="urunid" />
+    </Key>
+    <Property Name="urunid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="urunad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="urunmarka" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="urunkategori" Type="Byte" />
+    <Property Name="urunfiyat" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="urunstok" Type="Int16" />
+    <NavigationProperty Name="tblkategori" Relationship="Self.FK_tblurun_tblkategori1" FromRole="tblurun" ToRole="tblkategori" />
+    <NavigationProperty Name="tblsatiss" Relationship="Self.FK_tblsatiss_tblurun" FromRole="tblurun" ToRole="tblsatiss" />
+    <Property Name="durum" Type="Boolean" />
+  </EntityType>
+  <Association Name="FK_tblurun_tblkategori1">
+    <End Role="tblkategori" Type="Self.tblkategori" Multiplicity="0..1" />
+    <End Role="tblurun" Type="Self.tblurun" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblkategori">
+        <PropertyRef Name="kategoriid" />
+      </Principal>
+      <Dependent Role="tblurun">
+        <PropertyRef Name="urunkategori" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblsatiss_tblmusteri">
+    <End Role="tblmusteri" Type="Self.tblmusteri" Multiplicity="0..1" />
+    <End Role="tblsatiss" Type="Self.tblsatiss" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblmusteri">
+        <PropertyRef Name="musteriid" />
+      </Principal>
+      <Dependent Role="tblsatiss">
+        <PropertyRef Name="musteri" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblsatiss_tblpersonel">
+    <End Role="tblpersonel" Type="Self.tblpersonel" Multiplicity="0..1" />
+    <End Role="tblsatiss" Type="Self.tblsatiss" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblpersonel">
+        <PropertyRef Name="personelid" />
+      </Principal>
+      <Dependent Role="tblsatiss">
+        <PropertyRef Name="personel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblsatiss_tblurun">
+    <End Role="tblurun" Type="Self.tblurun" Multiplicity="0..1" />
+    <End Role="tblsatiss" Type="Self.tblsatiss" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblurun">
+        <PropertyRef Name="urunid" />
+      </Principal>
+      <Dependent Role="tblsatiss">
+        <PropertyRef Name="urun" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="odev3Entities3" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tblkategori" EntityType="Self.tblkategori" />
+    <EntitySet Name="tblmusteri" EntityType="Self.tblmusteri" />
+    <EntitySet Name="tblpersonel" EntityType="Self.tblpersonel" />
+    <EntitySet Name="tblsatiss" EntityType="Self.tblsatiss" />
+    <EntitySet Name="tblurun" EntityType="Self.tblurun" />
+    <AssociationSet Name="FK_tblurun_tblkategori1" Association="Self.FK_tblurun_tblkategori1">
+      <End Role="tblkategori" EntitySet="tblkategori" />
+      <End Role="tblurun" EntitySet="tblurun" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblsatiss_tblmusteri" Association="Self.FK_tblsatiss_tblmusteri">
+      <End Role="tblmusteri" EntitySet="tblmusteri" />
+      <End Role="tblsatiss" EntitySet="tblsatiss" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblsatiss_tblpersonel" Association="Self.FK_tblsatiss_tblpersonel">
+      <End Role="tblpersonel" EntitySet="tblpersonel" />
+      <End Role="tblsatiss" EntitySet="tblsatiss" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblsatiss_tblurun" Association="Self.FK_tblsatiss_tblurun">
+      <End Role="tblurun" EntitySet="tblurun" />
+      <End Role="tblsatiss" EntitySet="tblsatiss" />
+    </AssociationSet>
+    <EntitySet Name="TBLADMIN" EntityType="odev3Model.TBLADMIN" />
+  </EntityContainer>
+  <EntityType Name="TBLADMIN">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KULLANICI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SIFRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>
